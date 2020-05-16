@@ -1,0 +1,4 @@
+{
+  "watch": ["core.pegjs", "init.js"],
+  "ext": "js, pegjs"
+}
