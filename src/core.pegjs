@@ -120,7 +120,7 @@ MemberExpressionList
     }
     
 KeyValueExpression
-	= key:Identifier _ ":" _ value:(ArrayExpression / ObjectExpression / Identifier / Literal) {
+	= key:Identifier _ ":" _ value:(ArrayExpression / ObjectExpression / CallExpression / Identifier / Literal) {
 		return {
             type: "Property",
         	key,
@@ -139,12 +139,28 @@ ArrayExpression
     }
 
 ArrayElementList
-    = head:ArrayArgumentType tail:(_ "," _ ArrayArgumentType)* _ ","? {
+    = head:ArgumentType tail:(_ "," _ ArgumentType)* _ ","? {
         return buildList(head, tail, 3);
     }
 
-ArrayArgumentType
-    = ArrayExpression / ObjectExpression / Identifier / Literal
+ArgumentType
+    = ArrayExpression / ObjectExpression / CallExpression / Identifier / Literal
+
+// ------- Call Expression ----------
+
+CallExpression
+    = _ callee:Identifier _ "(" _ args:CallArgumentList?  _ ")" _ {
+        return {
+            type: "CallExpression",
+            callee,
+            arguments: optionalList(args)
+        }
+    }
+
+CallArgumentList
+    = head:ArgumentType tail:(_ "," _ ArgumentType)* _ ","? {
+        return buildList(head, tail, 3);
+    }
 
 // -------- Comment Expression ----------
 
