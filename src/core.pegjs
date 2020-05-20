@@ -7,7 +7,7 @@ ExpressionList
     }
 
 Expression
-    = SchemasBlockExpression / RequestBodiesBlockExpression
+    = SchemasBlockExpression / RequestBodiesBlockExpression / ParametersBlockExpression
 
 SchemasBlockExpression
     = _ "Schemas" _ "{" _ objs:(SchemaExpression / ExtendableSchemaExpression)* _"}" _ {
@@ -19,7 +19,7 @@ SchemasBlockExpression
 
     
 SchemaExpression
-	= name:Identifier obj:ObjectExpression {
+	= name:$Identifier obj:ObjectExpression {
         _schemas[name] = obj;
         ProgramNode.prototype.schemas = _schemas;
 
@@ -31,7 +31,7 @@ SchemaExpression
     }
     
 ExtendableSchemaExpression
-	= name:Identifier " " "extends" _ extName:Identifier obj:ObjectExpression {        
+	= name:$Identifier " " "extends" _ extName:$Identifier obj:ObjectExpression {        
         _schemas[name] = obj;
         ProgramNode.prototype.schemas = _schemas;
         
@@ -53,7 +53,7 @@ RequestBodiesBlockExpression
     }
 
 RequestBodyExpression
-	= name:Identifier obj:ObjectExpression {
+	= name:$Identifier obj:ObjectExpression {
         _requestBodies[name] = obj;
         ProgramNode.prototype.requestBodies = _requestBodies;
 
@@ -65,7 +65,7 @@ RequestBodyExpression
     }
 
 ExtendableRequestBodyExpression
-	= name:Identifier " " "extends" _ extName:Identifier obj:ObjectExpression {        
+	= name:$Identifier " " "extends" _ extName:$Identifier obj:ObjectExpression {        
         _schemas[name] = obj;
         ProgramNode.prototype.schemas = _schemas;
         
@@ -78,7 +78,21 @@ ExtendableRequestBodyExpression
     }
 
 ParametersBlockExpression
-    = name:""
+    = name:Identifier _ "{" _ objs:(ParameterExpression)* _ "}" {
+        return {
+            type: "ParametersBlockExpression",
+            body: objs
+        }
+    }
+
+ParameterExpression
+    = name:$Identifier obj:ObjectExpression {
+        return {
+            type: "ParameterExpression",
+            name,
+            body: obj
+        }
+    }
 
 // -------- General Expressions ----------
 
