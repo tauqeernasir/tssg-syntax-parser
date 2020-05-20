@@ -9,6 +9,8 @@ ExpressionList
 Expression
     = SchemasBlockExpression / RequestBodiesBlockExpression / ParametersBlockExpression
 
+// ------- Schemas Block Expression ---------
+
 SchemasBlockExpression
     = _ "Schemas" _ "{" _ objs:(SchemaExpression / ExtendableSchemaExpression)* _"}" _ {
        return {
@@ -43,8 +45,10 @@ ExtendableSchemaExpression
         }
     }
 
+// ------- Request Bodies Block Expression ---------
+
 RequestBodiesBlockExpression
-    = "RequestBodies" _ "{" _ objs:(RequestBodyExpression / ExtendableRequestBodyExpression)* _ "}" {
+    = _ "RequestBodies" _ "{" _ objs:(RequestBodyExpression / ExtendableRequestBodyExpression)* _ "}" _ {
 
         return {
             type: "RequestBodiesBlockExpression",
@@ -77,8 +81,10 @@ ExtendableRequestBodyExpression
         }
     }
 
+// ------- Parameters Block Expression ---------
+
 ParametersBlockExpression
-    = name:Identifier _ "{" _ objs:(ParameterExpression)* _ "}" {
+    = _ "Parameters" _ "{" _ objs:(ParameterExpression)* _ "}" _ {
         return {
             type: "ParametersBlockExpression",
             body: objs
@@ -94,7 +100,11 @@ ParameterExpression
         }
     }
 
+////////////////////////////////////////////
 // -------- General Expressions ----------
+////////////////////////////////////////////
+
+// -------- Object Expression ----------
 
 ObjectExpression
 	= _ "{" _ props:MemberExpressionList? _ "}" _ {
@@ -110,18 +120,40 @@ MemberExpressionList
     }
     
 KeyValueExpression
-	= key:Identifier _ ":" _ value:(ObjectExpression / Identifier / Literal) {
+	= key:Identifier _ ":" _ value:(ArrayExpression / ObjectExpression / Identifier / Literal) {
 		return {
         	key,
             value
         }
     }
 
+// -------- Array Expression ---------
+
+ArrayExpression
+    = _ "[" _ args:ArrayElementList? _ "]" _ {
+        return {
+            type: "ArrayExpression",
+            elements: args
+        }
+    }
+
+ArrayElementList
+    = head:ArrayArgumentType tail:(_ "," _ ArrayArgumentType)* _ ","? {
+        return buildList(head, tail, 3);
+    }
+
+ArrayArgumentType
+    = ObjectExpression / Identifier / Literal
+
+// -------- Comment Expression ----------
+
 MultilineCommentExpression
     = "/*" txt:$(!"*/" SourceChar)* "*/" {
         return txt.trim();
     }
-    
+
+// --------  Identifier Expression ----------
+
 Identifier
 	= name:$([_a-zA-Z][_a-zA-Z0-9]*) {
     	return {
@@ -129,7 +161,9 @@ Identifier
             name,
         }
     }
-   
+
+// -------- Literal Expression ----------
+
 Literal
 	= value:StringLiteral {
     	return {
