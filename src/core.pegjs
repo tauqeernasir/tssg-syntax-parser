@@ -1,5 +1,7 @@
 Start
-    = ExpressionList
+    = _ exps:ExpressionList _ {
+        return exps
+    }
 
 ExpressionList
     = head:Expression tail:(_ Expression _)* {
@@ -165,8 +167,9 @@ CallArgumentList
 // -------- Comment Expression ----------
 
 MultilineCommentExpression
-    = "/*" txt:$(!"*/" SourceChar)* "*/" {
-        return txt.trim();
+    = "/*" commet:$(!"*/" SourceChar)* "*/" {
+        _comments.push({ type: "MultilineCommentExpression", value: commet });
+        ProgramNode.prototype.comments = _comments;
     }
 
 // --------  Identifier Expression ----------
@@ -215,7 +218,9 @@ SourceChar
  = .
 
 _ "whitespace"
-  = ("\t"
+  = (
+    MultilineCommentExpression
+  / "\t"
   / "\v"
   / "\f"
   / " "
