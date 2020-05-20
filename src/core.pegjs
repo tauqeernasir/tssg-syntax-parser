@@ -110,7 +110,7 @@ ObjectExpression
 	= _ "{" _ props:MemberExpressionList? _ "}" _ {
     	return {
         	type: "ObjectExpression",
-            properties: props || []
+            properties: optionalList(props)
         }
     }
 
@@ -122,6 +122,7 @@ MemberExpressionList
 KeyValueExpression
 	= key:Identifier _ ":" _ value:(ArrayExpression / ObjectExpression / Identifier / Literal) {
 		return {
+            type: "Property",
         	key,
             value
         }
@@ -133,7 +134,7 @@ ArrayExpression
     = _ "[" _ args:ArrayElementList? _ "]" _ {
         return {
             type: "ArrayExpression",
-            elements: args
+            elements: optionalList(args)
         }
     }
 
@@ -143,7 +144,7 @@ ArrayElementList
     }
 
 ArrayArgumentType
-    = ObjectExpression / Identifier / Literal
+    = ArrayExpression / ObjectExpression / Identifier / Literal
 
 // -------- Comment Expression ----------
 
