@@ -19,7 +19,7 @@ SchemasBlockExpression
 
     
 SchemaExpression
-	= name:$Identifier obj:ObjectExpression {
+	= name:Identifier obj:ObjectExpression {
         _schemas[name] = obj;
         ProgramNode.prototype.schemas = _schemas;
 
@@ -31,7 +31,7 @@ SchemaExpression
     }
     
 ExtendableSchemaExpression
-	= name:$Identifier " " "extends" _ extName:$Identifier obj:ObjectExpression {        
+	= name:Identifier " " "extends" _ extName:Identifier obj:ObjectExpression {        
         _schemas[name] = obj;
         ProgramNode.prototype.schemas = _schemas;
         
@@ -53,7 +53,7 @@ RequestBodiesBlockExpression
     }
 
 RequestBodyExpression
-	= name:$Identifier obj:ObjectExpression {
+	= name:Identifier obj:ObjectExpression {
         _requestBodies[name] = obj;
         ProgramNode.prototype.requestBodies = _requestBodies;
 
@@ -65,7 +65,7 @@ RequestBodyExpression
     }
 
 ExtendableRequestBodyExpression
-	= name:$Identifier " " "extends" _ extName:$Identifier obj:ObjectExpression {        
+	= name:Identifier " " "extends" _ extName:Identifier obj:ObjectExpression {        
         _schemas[name] = obj;
         ProgramNode.prototype.schemas = _schemas;
         
@@ -77,6 +77,8 @@ ExtendableRequestBodyExpression
         }
     }
 
+ParametersBlockExpression
+    = name:""
 
 // -------- General Expressions ----------
 
@@ -107,28 +109,28 @@ MultilineCommentExpression
     }
     
 Identifier
-	= iden:$([_a-zA-Z][_a-zA-Z0-9]*) {
+	= name:$([_a-zA-Z][_a-zA-Z0-9]*) {
     	return {
         	type: "IdentifierExpression",
-            name: iden,
+            name,
         }
     }
    
 Literal
-	= lit:StringLiteral {
+	= value:StringLiteral {
     	return {
         	type: "Literal",
-            value: lit
+            value
         }
     }
     
 StringLiteral
-	= '"' chars:DoubleStringChar* '"' {
-    	return chars.join("");
+	= '"' chars:$(DoubleStringChar*) '"' {
+    	return chars;
     }
     /
-    "'" chars:SingleStringChar* "'" {
-    	return chars.join("");
+    "'" chars:$(SingleStringChar*) "'" {
+    	return chars;
     }
 
 DoubleStringChar
