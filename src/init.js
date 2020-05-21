@@ -7,6 +7,9 @@ const _requestBodies = {};
 // cache all comments
 const _comments = [];
 
+// cache all parameters
+const _parameters = [];
+
 function extractList(list, index) {
   return list.map((item) => item[index]);
 }

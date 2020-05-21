@@ -25,7 +25,7 @@ SchemasBlockExpression
 SchemaExpression
 	= name:$Identifier obj:ObjectExpression {
         _schemas[name] = obj;
-        ProgramNode.prototype.schemas = _schemas;
+        ProgramNode.schemas = _schemas;
 
         return {
         	type: "SchemaExpression",
@@ -95,6 +95,9 @@ ParametersBlockExpression
 
 ParameterExpression
     = name:$Identifier obj:ObjectExpression {
+        _parameters[name] = obj;
+        ProgramNode.prototype.parameters = _parameters;
+
         return {
             type: "ParameterExpression",
             name,
@@ -168,7 +171,7 @@ CallArgumentList
 
 MultilineCommentExpression
     = "/*" commet:$(!"*/" SourceChar)* "*/" {
-        _comments.push({ type: "MultilineCommentExpression", value: commet });
+        _comments.push({ type: "MultilineCommentExpression", value: commet.trim() });
         ProgramNode.prototype.comments = _comments;
     }
 

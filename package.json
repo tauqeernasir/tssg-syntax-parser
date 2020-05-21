@@ -1,7 +1,7 @@
 {
-  "name": "tssg-parser",
+  "name": "@tssg/syntax-parser",
   "version": "1.0.0",
-  "main": "index.js",
+  "main": "dist/parser.js",
   "author": "Tauqeer Nasir <tauqeer.insta@gmail.com>",
   "license": "MIT",
   "scripts": {
