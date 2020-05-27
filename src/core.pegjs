@@ -9,7 +9,7 @@ ExpressionList
     }
 
 Expression
-    = SchemasBlockExpression / RequestBodiesBlockExpression / ParametersBlockExpression
+    = SchemasBlockExpression / RequestBodiesBlockExpression / ParametersBlockExpression / PathsBlockExpression
 
 // ------- Schemas Block Expression ---------
 
@@ -105,6 +105,128 @@ ParameterExpression
         }
     }
 
+// --------- Paths Block Expression ------------
+
+PathsBlockExpression
+    = _ "Paths" _ "{" _ exps:PathExpressionList _ "}" _ {
+        return { 
+            type: "PathsBlockExpression",
+            body: exps
+        }
+    }
+
+PathExpressionList
+    = head:PathExpression tail:(_ PathExpression)* {
+        return buildList(head, tail, 1);
+    }
+
+PathExpression
+    = _ endpoint:EndpointName " " _ tag:TagName " " _ "{" _ methods:MethodExpressionList _ "}" _ {
+
+        const method = {
+            type: "PathExpression",
+            endpoint,
+            tag,
+            methods
+        }
+
+        _paths[endpoint] = method;
+        ProgramNode.prototype.paths = _paths;
+
+        return method; 
+    }
+
+MethodExpressionList
+    = head:MethodExpression tail:(_ MethodExpression)* {
+        return buildList(head, tail, 1);
+    }
+
+MethodExpression
+    = _ name:MethodName body:MethodBody _ {
+        return {
+            type: "MethodExpression",
+            name,
+            body
+        }
+    }
+
+MethodBody
+    = _ "{" _ properties:MethodBodyMemberExpressionList? _ "}" _ {
+        return {
+            type: "MethodBodyObjectExpression",
+            properties: optionalList(properties),
+        }
+    }
+
+MethodBodyMemberExpressionList
+    = head:MethodBodyMemberExpression tail:(_ "," MethodBodyMemberExpression)* {
+        return buildList(head, tail, 2);
+    }
+
+MethodBodyMemberExpression
+    = _ key:"description" _ ":" _ value:Literal _ {
+        return {
+            type : "Property",
+            key: {
+                type: "IdentifierExpression",
+                name: key
+            },
+            value
+        }
+    } 
+    /
+    _ "requestBody" _ ":" _ value:ObjectExpression _ {
+        return {
+            type: "MethodRequestBodyExpression",
+            value
+        }
+    }
+    /
+    _ "responses" _ ":" _ value:ResponseObjectExpression {
+        return {
+            type: "MethodRequestBodyExpression",
+            value
+        }
+    }
+
+ResponseObjectExpression
+    = _ "{" _ properties:ResponseObjectMemberExpressionList? _ "}" _ {
+        return {
+            type: "ResponseObjectExpression",
+            properties: optionalList(properties)
+        }
+    }
+
+ResponseObjectMemberExpressionList
+    = head:ResponseObjectMemberExpression tail:(_ "," ResponseObjectMemberExpression)* {
+        return buildList(head, tail, 2);
+    }
+
+ResponseObjectMemberExpression
+    = _ name:$[0-9]+ _ ":" obj:ObjectExpression {
+        return {
+            type: "ResponseObjectMemberExpression",
+            key: {
+                type: "Literal",
+                name,
+            },
+            value: obj
+        }
+    }
+
+MethodName
+    = "post" / "get" / "put" / "patch" / "delete"
+
+EndpointName
+    = endpoint: $[-_a-z0-9?\/]i+ {
+        return endpoint;
+    }
+
+TagName
+    = "(" tag:$[a-z]i+ ")" {
+        return tag;
+    }
+
 ////////////////////////////////////////////
 // -------- General Expressions ----------
 ////////////////////////////////////////////
@@ -171,7 +293,7 @@ CallArgumentList
 
 MultilineCommentExpression
     = "/*" commet:$(!"*/" SourceChar)* "*/" {
-        _comments.push({ type: "MultilineCommentExpression", value: commet.trim() });
+        _comments.push({ type: "MultilineCommentExpression", value: commet.trim(), location: location() });
         ProgramNode.prototype.comments = _comments;
     }
 
