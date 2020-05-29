@@ -7,12 +7,26 @@
   "scripts": {
     "build": "mkdirp dist && pegjs -o dist/parser.js src/parser-auto-gen.pegjs",
     "merge": "node src/merger.js",
-    "dev": "nodemon --exec 'yarn merge && yarn build'"
+    "dev": "nodemon --exec 'yarn merge && yarn build'",
+    "test": "jest",
+    "prettier": "prettier --tab-width 2 --write \"src/**/*.{js,json}\" \"__tests__/**/*.{js,json}\""
   },
   "devDependencies": {
+    "husky": "^4.2.5",
+    "jest": "^26.0.1",
+    "lint-staged": "^10.2.7",
     "mkdirp": "^1.0.4",
     "nodemon": "^2.0.4",
     "pegjs": "^0.10.0",
     "prettier": "^2.0.5"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged"
+    }
+  },
+  "lint-staged": {
+    "src/**/*.{js,json}": "prettier --write --tab-width 2",
+    "__tests__/**/*.{js}": "prettier --write --tab-width 2"
   }
 }
