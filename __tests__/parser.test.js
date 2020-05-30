@@ -2,13 +2,17 @@ const peg = require("pegjs");
 const path = require("path");
 const fs = require("fs");
 
-const grammar = fs.readFileSync(
-  path.resolve(__dirname, "../src/parser-auto-gen.pegjs"),
-  {
-    encoding: "utf-8",
-  }
-);
-const parser = peg.generate(grammar);
+let parser;
+
+beforeAll(() => {
+  const grammar = fs.readFileSync(
+    path.resolve(__dirname, "../src/parser-auto-gen.pegjs"),
+    {
+      encoding: "utf-8",
+    }
+  );
+  parser = peg.generate(grammar);
+});
 
 describe("tests for Parameters Block", () => {
   it("given correct Parameters Block, should return correct parsed output ", () => {
@@ -74,34 +78,34 @@ describe("tests for Parameters Block", () => {
     }   
     `;
     const expected = {
-        type: "Program",
-        body: [
-          {
-            type: "ParametersBlockExpression",
-            body: [
-              {
-                type: "ParameterExpression",
-                name: "GetUser",
-                body: {
-                  type: "ObjectExpression",
-                  properties: [
-                    {
-                      type: "Property",
-                      key: { type: "IdentifierExpression", name: "id" },
-                      value: { type: "IdentifierExpression", name: "string" },
-                    },
-                    {
-                      type: "Property",
-                      key: { type: "IdentifierExpression", name: "filter" },
-                      value: { type: "ObjectExpression", properties: [] },
-                    },
-                  ],
-                },
+      type: "Program",
+      body: [
+        {
+          type: "ParametersBlockExpression",
+          body: [
+            {
+              type: "ParameterExpression",
+              name: "GetUser",
+              body: {
+                type: "ObjectExpression",
+                properties: [
+                  {
+                    type: "Property",
+                    key: { type: "IdentifierExpression", name: "id" },
+                    value: { type: "IdentifierExpression", name: "string" },
+                  },
+                  {
+                    type: "Property",
+                    key: { type: "IdentifierExpression", name: "filter" },
+                    value: { type: "ObjectExpression", properties: [] },
+                  },
+                ],
               },
-            ],
-          },
-        ],
-      }
+            },
+          ],
+        },
+      ],
+    };
     expect(parser.parse(example)).toEqual(expected);
   });
 });
@@ -164,34 +168,34 @@ describe("tests for RequestBodies Block", () => {
     }   
     `;
     const expected = {
-        type: "Program",
-        body: [
-          {
-            type: "RequestBodiesBlockExpression",
-            body: [
-              {
-                type: "RequestBodyExpression",
-                name: "GetUser",
-                body: {
-                  type: "ObjectExpression",
-                  properties: [
-                    {
-                      type: "Property",
-                      key: { type: "IdentifierExpression", name: "id" },
-                      value: { type: "IdentifierExpression", name: "string" },
-                    },
-                    {
-                      type: "Property",
-                      key: { type: "IdentifierExpression", name: "filter" },
-                      value: { type: "ObjectExpression", properties: [] },
-                    },
-                  ],
-                },
+      type: "Program",
+      body: [
+        {
+          type: "RequestBodiesBlockExpression",
+          body: [
+            {
+              type: "RequestBodyExpression",
+              name: "GetUser",
+              body: {
+                type: "ObjectExpression",
+                properties: [
+                  {
+                    type: "Property",
+                    key: { type: "IdentifierExpression", name: "id" },
+                    value: { type: "IdentifierExpression", name: "string" },
+                  },
+                  {
+                    type: "Property",
+                    key: { type: "IdentifierExpression", name: "filter" },
+                    value: { type: "ObjectExpression", properties: [] },
+                  },
+                ],
               },
-            ],
-          },
-        ],
-      }
+            },
+          ],
+        },
+      ],
+    };
     expect(parser.parse(example)).toEqual(expected);
   });
 });
