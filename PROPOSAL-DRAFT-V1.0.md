@@ -6,7 +6,27 @@ This is the specification for TSSG(The Swagger Schema Generator), which is a new
 
 
 ## Table of Contents
-[TOC]
+ - [Overview](#overview)
+ - [Language](#language)
+    - [White Spaces](#white-spaces)
+    - [Line Terminators](#line-terminators)
+    - [Comments](#comments)
+    - [Data Types](#data-types)
+      - [Number](#number)
+      - [String](#string)
+      - [Boolean](#boolean)
+      - [Object](#object)
+      - [Array](#array)
+     - [Schema Block](#schema-block)
+        - [Schema Expression](#schema-expression)
+        - [Extendable Schema Expression](#extendable-schema-expression)
+      - [RequestBodies Block](#requestbodies-block)
+        - [RequestBody Expression](#requestbody-expression)
+        - [Extendable RequestBody](#extendable-requestbody)
+       - [Parameters Block](#parameters-block)
+       - [Reference](#reference)
+       - [Paths](#paths)
+
 
 ## Overview
 Writing OpenAPI Schema can be tiresome and time wasting task if you write a lot of API Documentation. Updating existing Schema can also be cumbersome and confusing especially when project grows to hundreds of APIs. TSSG is here to help you write schema in an easy, clean and concise way. We have proposed a new and easy to understand Syntax/Grammar for this. It allows you to write less and get full OpenAPI Schema without writing and repeating same line again and again.
@@ -260,5 +280,3 @@ We can refer to any existing Schema, RequestBodies or any custom type:
 
 
 ```
-
-[x] adv
