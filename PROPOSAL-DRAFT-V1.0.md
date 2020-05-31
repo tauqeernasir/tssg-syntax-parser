@@ -94,7 +94,7 @@ This sequence of lexical tokens are then scanned from left to right to produce a
 We refer to A TSSG documents as programs. A program may contain expression blocks(schemas, requestbodies, paths, parameters), data types and Ignored lexical grammars(comments, whitespaces, line terminators).
 
 ### White Spaces
-White space is used to improve legibility of source text and act as separation between tokens, and any amount of white space may appear before or after any token. White space between tokens is not significant to the semantic meaning of a TSSG Document, however whißte space characters may appear within a String or Comment token.
+White space is used to improve legibility of source text and act as separation between tokens, and any amount of white space may appear before or after any token. White space between tokens is not significant to the semantic meaning of a TSSG Document, however white space characters may appear within a String or Comment token.
 
 ### Line Terminators
 
@@ -116,39 +116,38 @@ comment */
 #### Number
 ```javascript
 
-  age : number
+age: number
 ```
 #### String
 ```javascript
-  name : string
+name: string
 ```
 #### Boolean
 
 ```javascript
-isVerified: boolean,
-
+isVerified: boolean
 ```
 
 #### Object
-```json
+```javascript
 
-address : {
-        city: string,
-        country: string,
-        zip: number
+address: {
+    city: string,
+    country: string,
+    zip: number
 }
 ```
 >Notice `address` which is an `Object` with 3 properties. 
 
 #### Array
-```json
+```javascript
 profileImages: [{
-            size: {
-                width: number,
-                height: number
-            }
-            url: string
-        }]
+    size: {
+        width: number,
+        height: number
+    },
+    url: string
+}]
 ```
 >Notice `profileImages` which is an `Array` of `Objects` with 2 properties.
 
@@ -164,6 +163,7 @@ Schemas {
         name: string,
         email: string
     }
+    
 }
 ```
 #### Extendable Schema Expression
@@ -182,7 +182,6 @@ Schemas {
     }
 
 }
-
 ```
 ### RequestBodies Block
 RequestBodies block can be written similarly as Schemas block:
@@ -195,13 +194,12 @@ RequestBodies {
         page: number,
         limit: number,
         totalPages: number,
-		filters:{
-		 ids: [string]
-		}
+        filters: {
+          ids: [string]
+        }
     }
 
 }
-
 ```
 
 #### Extendable RequestBody
@@ -222,7 +220,6 @@ RequestBodies {
     }
 
 }
-
 ```
 ### Parameters Block
 
@@ -236,7 +233,6 @@ Parameters {
     }
 
 }
-
 ```
 ### Reference
 
@@ -244,39 +240,40 @@ We can refer to any existing Schema, RequestBodies or any custom type:
 
 ```javascript
 {
-   user : Schemas.User,
-   userList : [Schemas.User]
+   user: Schemas.User,
+   userList: [Schemas.User]
 }
-
 ```
 > Note: Here we are refering to existing [Schemas.User](#schema-expression).
 ### Paths 
 
 ```javascript
 /v1-user (user) {
+
     post: {
         description: "description goes here",
         requestBody: RequestBodies.V1GetUser.address,
         responses: {
           200: {
             description: "",
-            content@application/json: [@Schemas.V1User]
+            content@application/json: [@Schemas.V1User],
             content@text/plain: string
           }
         }
-	 }
+    }
+
     get: {
         description: "description goes here",
         requestBody: requestBody.V1GetUser,
         responses: {
           200: {
             description: "",
-            content@application/json: Schemas.ArrayOfUsers
+            content@application/json: Schemas.ArrayOfUsers,
             content@text/plain: string
           }
         }
     }
-  }
 
+}
 
 ```

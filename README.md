@@ -131,5 +131,10 @@ Data types can be used as follow:
 
 > Notice `address` which is an `Object` with 3 properties. And `profileImages` which is an `Array` of `Objects` with 2 properties.
 
+
+#### Syntax Draft Proposal
+ Read our [Proposal Draft](./PROPOSAL-DRAFT-V1.0.md).
+
 #### Hey there! Want to contribute?
+
  Read our [Contribution Guidline](./.github/contribution-guideline.md).
