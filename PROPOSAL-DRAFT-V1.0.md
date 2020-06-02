@@ -2,15 +2,15 @@
 *Current Working Draft*
 
 ## Introduction
-This is the specification for TSSG(The Swagger Schema Generator), which is a new and easy to understand Syntax/Grammar to write OpenAPI Schema in an easy, clean and concise way.
+This is the specification for TSSG(The Swagger Schema Generator), which enables developers to generate OpenAPI Schema with an easy and concise syntax/grammar.
 
-> The OpenAPI Specification (OAS) defines a standard, language-agnostic
+> The [OpenAPI Specification](https://swagger.io/specification/) (OAS) defines a standard, language-agnostic
 > interface to RESTful APIs which allows both humans and computers to
 > discover and understand the capabilities of the service without access
 > to source code, documentation, or through network traffic inspection.
 > When properly defined, a consumer can understand and interact with the
 > remote service with a minimal amount of implementation logic.
-> [OpenAPI Specification](https://swagger.io/specification/)
+> 
 
 ## Table of Contents
  - [Overview](#overview)
