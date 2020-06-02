@@ -4,6 +4,13 @@
 ## Introduction
 This is the specification for TSSG(The Swagger Schema Generator), which is a new and easy to understand Syntax/Grammar to write OpenAPI Schema in an easy, clean and concise way.
 
+> The OpenAPI Specification (OAS) defines a standard, language-agnostic
+> interface to RESTful APIs which allows both humans and computers to
+> discover and understand the capabilities of the service without access
+> to source code, documentation, or through network traffic inspection.
+> When properly defined, a consumer can understand and interact with the
+> remote service with a minimal amount of implementation logic.
+> [OpenAPI Specification](https://swagger.io/specification/)
 
 ## Table of Contents
  - [Overview](#overview)
@@ -11,7 +18,7 @@ This is the specification for TSSG(The Swagger Schema Generator), which is a new
     - [White Spaces](#white-spaces)
     - [Line Terminators](#line-terminators)
     - [Comments](#comments)
-    - [Data Types](#data-types)
+    - [Lexical Tokens](#lexical-tokens)
       - [Number](#number)
       - [String](#string)
       - [Boolean](#boolean)
@@ -31,7 +38,7 @@ This is the specification for TSSG(The Swagger Schema Generator), which is a new
 ## Overview
 Writing OpenAPI Schema can be tiresome and time wasting task if you write a lot of API Documentation. Updating existing Schema can also be cumbersome and confusing especially when project grows to hundreds of APIs. TSSG is here to help you write schema in an easy, clean and concise way. We have proposed a new and easy to understand Syntax/Grammar for this. It allows you to write less and get full OpenAPI Schema without writing and repeating same line again and again.
 
-For example, Consider the following object Schema of User:
+For example, Consider the following object Schema of User when written according to OpenAPI Specification:
 
 ```json
 {
@@ -91,7 +98,7 @@ A TSSG document is defined as a syntactic grammar where terminal symbols are tok
 This sequence of lexical tokens are then scanned from left to right to produce an abstract syntax tree (AST) according to the Document syntactical grammar.
 
 
-We refer to A TSSG documents as programs. A program may contain expression blocks(schemas, requestbodies, paths, parameters), data types and Ignored lexical grammars(comments, whitespaces, line terminators).
+We refer to A TSSG documents as programs. A program may contain expression blocks(schemas, requestbodies, paths, parameters), lexical tokens and Ignored lexical grammars(comments, whitespaces, line terminators).
 
 ### White Spaces
 White space is used to improve legibility of source text and act as separation between tokens, and any amount of white space may appear before or after any token. White space between tokens is not significant to the semantic meaning of a TSSG Document, however white space characters may appear within a String or Comment token.
@@ -112,7 +119,7 @@ Comments are Ignored like white space and may appear after any token, or before 
 multi line 
 comment */
 ```
-### Data Types
+### Lexical Tokens
 #### Number
 ```javascript
 
