@@ -108,6 +108,68 @@ describe("tests for Parameters Block", () => {
     };
     expect(parser.parse(example)).toEqual(expected);
   });
+
+  it("given Parameters Block with missing opening curly bracket {, should return syntaxError ", () => {
+    function parseExample() {
+      const example = `
+      Parameters    
+          GetUser {
+              id: string,
+              filter: {}
+          }
+      }   
+      `;
+      parser.parse(example);
+    }
+    expect(parseExample).toThrowError('Expected "{" but "G" found.');
+  });
+
+  it("given Parameters Block with missing closing curly bracket }, should return syntaxError ", () => {
+    function parseExample() {
+      const example = `
+      Parameters    {
+          GetUser {
+              id: string,
+              filter: {}
+          }
+      `;
+      parser.parse(example);
+    }
+    expect(parseExample).toThrowError(
+      'Expected "}" or [_a-zA-Z] but end of input found.'
+    );
+  });
+
+  it("given Parameters Block with missing expression block, should return syntaxError ", () => {
+    function parseExample() {
+      const example = `
+      Parameters    {
+          {
+              id: string,
+              filter: {}
+          }
+        }
+      `;
+      parser.parse(example);
+    }
+    expect(parseExample).toThrowError(
+      'Expected "}" or [_a-zA-Z] but "{" found.'
+    );
+  });
+
+  it("given Parameters Block with an incorrect expression, should return syntaxError ", () => {
+    function parseExample() {
+      const example = `
+      Parameters    {
+        undefined
+      }
+      `;
+      parser.parse(example);
+    }
+    expect(parseExample).toThrowError(
+      'Expected \"{\" but \"}\" found.'
+    );
+  });
 });
 
 describe("tests for RequestBodies Block", () => {
@@ -197,5 +259,67 @@ describe("tests for RequestBodies Block", () => {
       ],
     };
     expect(parser.parse(example)).toEqual(expected);
+  });
+
+  it("given RequestBodies Block with missing opening curly bracket {, should return syntaxError ", () => {
+    function parseExample() {
+      const example = `
+      RequestBodies    
+          GetUser {
+              id: string,
+              filter: {}
+          }
+      }   
+      `;
+      parser.parse(example);
+    }
+    expect(parseExample).toThrowError('Expected "{" but "G" found.');
+  });
+
+  it("given RequestBodies Block with missing closing curly bracket }, should return syntaxError ", () => {
+    function parseExample() {
+      const example = `
+      RequestBodies    {
+          GetUser {
+              id: string,
+              filter: {}
+          }
+      `;
+      parser.parse(example);
+    }
+    expect(parseExample).toThrowError(
+      'Expected "}" or [_a-zA-Z] but end of input found.'
+    );
+  });
+
+  it("given RequestBodies Block with missing expression block, should return syntaxError ", () => {
+    function parseExample() {
+      const example = `
+      RequestBodies    {
+          {
+              id: string,
+              filter: {}
+          }
+        }
+      `;
+      parser.parse(example);
+    }
+    expect(parseExample).toThrowError(
+      'Expected "}" or [_a-zA-Z] but "{" found.'
+    );
+  });
+
+  it("given RequestBodies Block with an incorrect expression, should return syntaxError ", () => {
+    function parseExample() {
+      const example = `
+      RequestBodies    {
+        undefined
+      }
+      `;
+      parser.parse(example);
+    }
+    expect(parseExample).toThrowError(
+      'Expected \"{\" but \"}\" found.'
+    );
   });
 });
