@@ -166,9 +166,7 @@ describe("tests for Parameters Block", () => {
       `;
       parser.parse(example);
     }
-    expect(parseExample).toThrowError(
-      'Expected \"{\" but \"}\" found.'
-    );
+    expect(parseExample).toThrowError('Expected "{" but "}" found.');
   });
 });
 
@@ -318,8 +316,6 @@ describe("tests for RequestBodies Block", () => {
       `;
       parser.parse(example);
     }
-    expect(parseExample).toThrowError(
-      'Expected \"{\" but \"}\" found.'
-    );
+    expect(parseExample).toThrowError('Expected "{" but "}" found.');
   });
 });
