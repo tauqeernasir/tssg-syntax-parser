@@ -4,6 +4,15 @@ const _schemas = {};
 // cache all request bodies
 const _requestBodies = {};
 
+// cache all comments
+const _comments = [];
+
+// cache all parameters
+const _parameters = {};
+
+// cache all paths
+const _paths = {};
+
 function extractList(list, index) {
   return list.map((item) => item[index]);
 }
