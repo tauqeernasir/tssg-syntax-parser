@@ -2,7 +2,7 @@ name: Build
 
 on:
   push:
-    branches: [*]
+    branches: [master, develop]
 
 jobs:
   build:
@@ -12,7 +12,5 @@ jobs:
       - uses: actions/setup-node@v1
         with:
           node-version: 12
-      - run:
-          npm run test
-      - run:
-          npm run build:prod
+      - run: npm run test
+      - run: npm run build:prod
