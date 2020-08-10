@@ -184,7 +184,7 @@ MethodBodyMemberExpression
   /
   _ "responses" _ ":" _ value:ResponseObjectExpression {
     return {
-      type: "MethodRequestBodyExpression",
+      type: "MethodResponseExpression",
       value
     }
   }
