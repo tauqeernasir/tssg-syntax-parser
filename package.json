@@ -9,6 +9,7 @@
     "merge": "node src/merger.js",
     "dev": "nodemon --exec 'yarn merge && yarn build'",
     "test": "jest",
+    "build:prod": "yarn merge && yarn build",
     "prettier": "prettier --tab-width 2 --write \"src/**/*.{js,json}\" \"__tests__/**/*.{js,json}\""
   },
   "devDependencies": {
