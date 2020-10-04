@@ -247,7 +247,7 @@ MemberExpressionList
   }
 
 KeyValueExpression
-	= key:Identifier _ ":" _ value:(ArrayExpression / ObjectExpression / CallExpression / Identifier / Literal) {
+	= key:Identifier _ ":" _ value:(ArrayExpression / ObjectExpression / CallExpression / Identifier / Literal / Number) {
     return {
         type: "Property",
         key,
@@ -308,6 +308,14 @@ Identifier
   }
 
 // -------- Literal Expression ----------
+
+Number
+  = value:$[0-9]+ {
+    return {
+      type: "Number",
+      value: Number(value)
+    }
+  }
 
 Literal
 	= value:StringLiteral {
