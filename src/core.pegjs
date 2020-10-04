@@ -247,7 +247,7 @@ MemberExpressionList
   }
 
 KeyValueExpression
-	= key:Identifier _ ":" _ value:(ArrayExpression / ObjectExpression / RepeatExpression /CallExpression / Identifier / Literal / Number) {
+	= key:Identifier _ ":" _ value:(ArrayExpression / RepeatExpression / ObjectExpression  /CallExpression / Identifier / Literal / Number) {
     return {
         type: "Property",
         key,
@@ -258,9 +258,9 @@ KeyValueExpression
 // -------- Repeat Expression -----------
 
 RepeatExpression
-  = iden:Identifier "[]" _ {
+  = initialBlock:(ObjectExpression / Identifier) "[]" _ {
     return {
-      ...iden,
+      ...initialBlock,
       repeater: "array"
     }
   }

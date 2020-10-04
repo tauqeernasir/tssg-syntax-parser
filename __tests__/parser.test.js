@@ -336,6 +336,14 @@ describe("test for repeater expression", () => {
         }
       }
     `,
+    // array of object
+    `
+      Schemas {
+        User {
+          favColors: []{}
+        }
+      }
+    `,
   ])(
     "given incorrect repeater expression, it should return syntaxError",
     (example) => {
@@ -383,6 +391,30 @@ describe("test for repeater expression", () => {
                       repeater: "array",
                     },
                   },
+                  {
+                    type: "Property",
+                    key: {
+                      type: "IdentifierExpression",
+                      name: "arrayOfObjects",
+                    },
+                    value: {
+                      type: "ObjectExpression",
+                      properties: [
+                        {
+                          type: "Property",
+                          key: {
+                            type: "IdentifierExpression",
+                            name: "something",
+                          },
+                          value: {
+                            type: "IdentifierExpression",
+                            name: "string",
+                          },
+                        },
+                      ],
+                      repeater: "array",
+                    },
+                  },
                 ],
               },
             },
@@ -395,7 +427,10 @@ describe("test for repeater expression", () => {
       Schemas {
         User {
           favColors: string[],
-          arrayOfNumbers: number[]
+          arrayOfNumbers: number[],
+          arrayOfObjects: {
+            something: string,
+          }[]
         }
       }
     `;
