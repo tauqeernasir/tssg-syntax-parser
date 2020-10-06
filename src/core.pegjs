@@ -247,12 +247,22 @@ MemberExpressionList
   }
 
 KeyValueExpression
-	= key:Identifier _ ":" _ value:(ArrayExpression / ObjectExpression / CallExpression / Identifier / Literal / Number) {
+	= key:Identifier _ ":" _ value:(ArrayExpression / RepeatExpression / ObjectExpression  /CallExpression / Identifier / Literal / Number) {
     return {
         type: "Property",
         key,
         value
       }
+  }
+
+// -------- Repeat Expression -----------
+
+RepeatExpression
+  = initialBlock:(ObjectExpression / Identifier) "[]" _ {
+    return {
+      ...initialBlock,
+      repeater: "array"
+    }
   }
 
 // -------- Array Expression ---------

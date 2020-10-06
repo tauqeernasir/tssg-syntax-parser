@@ -75,7 +75,7 @@ describe("tests for Parameters Block", () => {
             id: string,
             filter: {}
         }
-    }   
+    }
     `;
     const expected = {
       type: "Program",
@@ -112,12 +112,12 @@ describe("tests for Parameters Block", () => {
   it("given Parameters Block with missing opening curly bracket {, should return syntaxError ", () => {
     function parseExample() {
       const example = `
-      Parameters    
+      Parameters
           GetUser {
               id: string,
               filter: {}
           }
-      }   
+      }
       `;
       parser.parse(example);
     }
@@ -225,7 +225,7 @@ describe("tests for RequestBodies Block", () => {
             id: string,
             filter: {}
         }
-    }   
+    }
     `;
     const expected = {
       type: "Program",
@@ -262,12 +262,12 @@ describe("tests for RequestBodies Block", () => {
   it("given RequestBodies Block with missing opening curly bracket {, should return syntaxError ", () => {
     function parseExample() {
       const example = `
-      RequestBodies    
+      RequestBodies
           GetUser {
               id: string,
               filter: {}
           }
-      }   
+      }
       `;
       parser.parse(example);
     }
@@ -317,5 +317,125 @@ describe("tests for RequestBodies Block", () => {
       parser.parse(example);
     }
     expect(parseExample).toThrowError('Expected "{" but "}" found.');
+  });
+});
+
+describe("test for repeater expression", () => {
+  it.each([
+    `
+      Schemas {
+        User {
+          favColors: []string
+        }
+      }
+    `,
+    `
+      Schemas {
+        User {
+          favColors: 12[]
+        }
+      }
+    `,
+    // array of object
+    `
+      Schemas {
+        User {
+          favColors: []{}
+        }
+      }
+    `,
+  ])(
+    "given incorrect repeater expression, it should return syntaxError",
+    (example) => {
+      function parseExample() {
+        parser.parse(example);
+      }
+      expect(parseExample).toThrowError();
+    }
+  );
+
+  it("given correct repeater expression, should return correct output", () => {
+    const expected = {
+      type: "Program",
+      body: [
+        {
+          type: "SchemasBlockExpression",
+          body: [
+            {
+              type: "SchemaExpression",
+              name: "User",
+              body: {
+                type: "ObjectExpression",
+                properties: [
+                  {
+                    type: "Property",
+                    key: {
+                      type: "IdentifierExpression",
+                      name: "favColors",
+                    },
+                    value: {
+                      type: "IdentifierExpression",
+                      name: "string",
+                      repeater: "array",
+                    },
+                  },
+                  {
+                    type: "Property",
+                    key: {
+                      type: "IdentifierExpression",
+                      name: "arrayOfNumbers",
+                    },
+                    value: {
+                      type: "IdentifierExpression",
+                      name: "number",
+                      repeater: "array",
+                    },
+                  },
+                  {
+                    type: "Property",
+                    key: {
+                      type: "IdentifierExpression",
+                      name: "arrayOfObjects",
+                    },
+                    value: {
+                      type: "ObjectExpression",
+                      properties: [
+                        {
+                          type: "Property",
+                          key: {
+                            type: "IdentifierExpression",
+                            name: "something",
+                          },
+                          value: {
+                            type: "IdentifierExpression",
+                            name: "string",
+                          },
+                        },
+                      ],
+                      repeater: "array",
+                    },
+                  },
+                ],
+              },
+            },
+          ],
+        },
+      ],
+    };
+
+    const example = `
+      Schemas {
+        User {
+          favColors: string[],
+          arrayOfNumbers: number[],
+          arrayOfObjects: {
+            something: string,
+          }[]
+        }
+      }
+    `;
+
+    expect(() => parser.parse(example)).not.toThrowError();
+    expect(parser.parse(example)).toEqual(expected);
   });
 });
