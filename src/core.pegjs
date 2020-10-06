@@ -302,8 +302,8 @@ CallArgumentList
 // -------- Comment Expression ----------
 
 MultilineCommentExpression
-  = "/*" commet:$(!"*/" SourceChar)* "*/" {
-    _comments.push({ type: "MultilineCommentExpression", value: commet.trim(), location: location() });
+  = "/*" comment:$(!"*/" SourceChar)* "*/" {
+    _comments.push({ type: "MultilineCommentExpression", value: comment.trim(), location: location() });
     ProgramNode.prototype.comments = _comments;
   }
 
