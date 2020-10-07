@@ -247,7 +247,7 @@ MemberExpressionList
   }
 
 KeyValueExpression
-	= key:Identifier _ ":" _ value:(ArrayExpression / RepeatExpression / ObjectExpression  /CallExpression / Identifier / Literal / Number) {
+	= key:Identifier _ ":" _ value:(ArrayExpression / RepeatExpression / ObjectExpression  / CallExpression / PropertyAccessExpression / Identifier / Literal / Number) {
     return {
         type: "Property",
         key,
@@ -255,10 +255,18 @@ KeyValueExpression
       }
   }
 
+PropertyAccessExpression
+  = _ obj:$Identifier _ keys:(_ "." _ $Identifier)+ _ ![.%^&*(@!#)] {
+    return {
+      type: "PropertyAccessExpression",
+      list: buildList(obj, keys, 3)
+    }
+  }
+
 // -------- Repeat Expression -----------
 
 RepeatExpression
-  = initialBlock:(ObjectExpression / Identifier) "[]" _ {
+  = initialBlock:(ObjectExpression / PropertyAccessExpression / Identifier) "[]" _ {
     return {
       ...initialBlock,
       repeater: "array"

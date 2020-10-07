@@ -439,3 +439,96 @@ describe("test for repeater expression", () => {
     expect(parser.parse(example)).toEqual(expected);
   });
 });
+
+describe("test for property access expression", () => {
+  it.each([
+    `
+      Schemas {
+        User {
+          favColors: .Schema.user
+        }
+      }
+    `,
+    `
+      Schemas {
+        User {
+          favColors: Schema.user.
+        }
+      }
+    `,
+    // array of object
+    `
+      Schemas {
+        User {
+          favColors: Schema..user
+        }
+      }
+    `,
+  ])(
+    "given incorrect property access expression, it should return syntaxError",
+    (example) => {
+      function parseExample() {
+        parser.parse(example);
+      }
+      expect(parseExample).toThrowError();
+    }
+  );
+
+  it("given correct property access expression, should return correct output", () => {
+    const expected = {
+      type: "Program",
+      body: [
+        {
+          type: "SchemasBlockExpression",
+          body: [
+            {
+              type: "SchemaExpression",
+              name: "BaseUser",
+              body: {
+                type: "ObjectExpression",
+                properties: [
+                  {
+                    type: "Property",
+                    key: {
+                      type: "IdentifierExpression",
+                      name: "name",
+                    },
+                    value: {
+                      type: "IdentifierExpression",
+                      name: "string",
+                      repeater: "array",
+                    },
+                  },
+                  {
+                    type: "Property",
+                    key: {
+                      type: "IdentifierExpression",
+                      name: "favColors",
+                    },
+                    value: {
+                      type: "PropertyAccessExpression",
+                      list: ["Schemas", "BaseUser"],
+                      repeater: "array",
+                    },
+                  },
+                ],
+              },
+            },
+          ],
+        },
+      ],
+    };
+
+    const example = `
+      Schemas {
+        BaseUser {
+          name: string[],
+          favColors: Schemas.BaseUser[]
+        }
+      }
+    `;
+
+    expect(() => parser.parse(example)).not.toThrowError();
+    expect(parser.parse(example)).toEqual(expected);
+  });
+});
