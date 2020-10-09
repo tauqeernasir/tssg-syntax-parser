@@ -5,8 +5,8 @@
   "author": "Tauqeer Nasir <tauqeer.insta@gmail.com>",
   "license": "MIT",
   "scripts": {
-    "build": "mkdirp dist && pegjs -o dist/parser.js src/parser-auto-gen.pegjs",
-    "merge": "node src/merger.js",
+    "build": "mkdirp dist && pegjs -o dist/parser.js src/parser/parser-auto-gen.pegjs",
+    "merge": "node src/parser/merger.js",
     "dev": "nodemon --exec 'yarn merge && yarn build'",
     "test": "jest",
     "build:prod": "yarn merge && yarn build",

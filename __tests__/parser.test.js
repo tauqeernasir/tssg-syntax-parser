@@ -6,7 +6,7 @@ let parser;
 
 beforeAll(() => {
   const grammar = fs.readFileSync(
-    path.resolve(__dirname, "../src/parser-auto-gen.pegjs"),
+    path.resolve(__dirname, "../src/parser/parser-auto-gen.pegjs"),
     {
       encoding: "utf-8",
     }
