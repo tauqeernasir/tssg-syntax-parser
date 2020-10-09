@@ -2,5 +2,5 @@ node_modules
 dist
 .DS_Store
 yarn-error.log
-src/parser-auto-gen.pegjs
+src/parser/parser-auto-gen.pegjs
 example
