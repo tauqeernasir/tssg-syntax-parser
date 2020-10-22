@@ -81,7 +81,7 @@ SchemaExpression
   }
 
 ExtendableSchemaExpression
-	= name:$Identifier " " "extends" _ extName:$Identifier obj:ObjectExpression {
+	= name:$Identifier " " "extends" _ extName:ExtendableSchemaList obj:ObjectExpression {
     _schemas[name] = obj;
     ProgramNode.prototype.schemas = _schemas;
 
@@ -92,6 +92,11 @@ ExtendableSchemaExpression
       body: obj
     }
 }
+
+ExtendableSchemaList
+  = head:$Identifier tail:(_ "," _ $Identifier)* _ ","? {
+    return buildList(head, tail, 3);
+  }
 
 // ------- Request Bodies Block Expression ---------
 

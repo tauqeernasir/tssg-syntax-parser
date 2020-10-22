@@ -5,6 +5,8 @@ const OPEN_API_SPEC = {};
 function ssgToOASParser(str) {
   const parsedScript = Parser.parse(str);
 
+  console.log("=>", JSON.stringify(parsedScript, null, 2));
+
   let OAS = {};
 
   for (const block of parsedScript.body) {
@@ -52,7 +54,7 @@ function schemaExpressionProcessor(exp) {
   //   );
   // }
 
-  if (!exp.extend) {
+  if (!exp.extend?.length) {
     return {
       [exp.name]: reduce(exp.body),
     };
@@ -61,9 +63,11 @@ function schemaExpressionProcessor(exp) {
   return {
     [exp.name]: {
       allOf: [
-        {
-          $ref: `#/components/schemas/${exp.extend}`,
-        },
+        ...(exp.extend?.map((ext) => {
+          return {
+            $ref: `#/components/schemas/${ext}`,
+          };
+        }) || []),
         reduce(exp.body),
       ],
     },
