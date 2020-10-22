@@ -283,6 +283,7 @@ ObjectExpression
 	= _ "{" _ props:MemberExpressionList? _ "}" _ {
     return {
       type: "ObjectExpression",
+      required: props.filter((prop) => !prop.optional).map((prop) => prop.key.name),
       properties: optionalList(props)
     }
   }
@@ -293,9 +294,10 @@ MemberExpressionList
   }
 
 KeyValueExpression
-	= key:Identifier _ ":" _ value:(ArrayExpression / RepeatExpression / ObjectExpression  / CallExpression / PropertyAccessExpression / Identifier / Literal / Number) {
+	= key:Identifier _ optional:"?"? _ ":" _ value:(ArrayExpression / RepeatExpression / ObjectExpression  / CallExpression / PropertyAccessExpression / Identifier / Literal / Number) {
     return {
         type: "Property",
+        optional: optional ? true : false,
         key,
         value
       }
