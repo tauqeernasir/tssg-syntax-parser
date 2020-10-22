@@ -1,15 +1,18 @@
 {
   "name": "@tssg/syntax-parser",
   "version": "1.0.0",
-  "main": "dist/parser.js",
+  "main": "dist/transformer",
+  "files": [
+    "dist"
+  ],
   "author": "Tauqeer Nasir <tauqeer.insta@gmail.com>",
   "license": "MIT",
   "scripts": {
-    "build": "mkdirp dist && pegjs -o dist/parser.js src/parser/parser-auto-gen.pegjs",
+    "build": "mkdirp dist && pegjs -o src/parser/parser.js src/parser/parser-auto-gen.pegjs",
     "merge": "node src/parser/merger.js",
     "dev": "nodemon --exec 'yarn merge && yarn build'",
     "test": "jest",
-    "build:prod": "yarn merge && yarn build",
+    "build:prod": "mkdirp dist/parser && mkdirp dist/transformer && yarn merge && yarn build && cp src/transformer/index.js dist/transformer/index.js && cp src/parser/parser.js dist/parser/parser.js",
     "prettier": "prettier --tab-width 2 --write \"src/**/*.{js,json}\" \"__tests__/**/*.{js,json}\""
   },
   "devDependencies": {

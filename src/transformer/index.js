@@ -1,9 +1,11 @@
-const Parser = require("../../dist/parser");
+const Parser = require("../parser/parser");
 
 const OPEN_API_SPEC = {};
 
 function ssgToOASParser(str) {
   const parsedScript = Parser.parse(str);
+
+  let OAS = {};
 
   for (const block of parsedScript.body) {
     switch (block.type) {
@@ -19,7 +21,9 @@ function ssgToOASParser(str) {
     }
   }
 
-  return OPEN_API_SPEC;
+  OAS = { ...OPEN_API_SPEC };
+
+  return OAS;
 }
 
 function schemaBlockProcessor(block) {
