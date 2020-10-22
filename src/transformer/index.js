@@ -50,10 +50,7 @@ function schemaExpressionProcessor(exp) {
 
   if (!exp.extend) {
     return {
-      [exp.name]: {
-        type: "object",
-        properties: reduce(exp.body),
-      },
+      [exp.name]: reduce(exp.body),
     };
   }
 
@@ -63,10 +60,7 @@ function schemaExpressionProcessor(exp) {
         {
           $ref: `#/components/schemas/${exp.extend}`,
         },
-        {
-          type: "object",
-          properties: reduce(exp.body),
-        },
+        reduce(exp.body),
       ],
     },
   };
@@ -79,7 +73,7 @@ function objectExpressionProcessor(exp) {
     );
   }
 
-  return exp.properties
+  const mappedProps = exp.properties
     .map((prop) => {
       return propertyExpressionProcessor(prop);
     })
@@ -93,6 +87,12 @@ function objectExpressionProcessor(exp) {
       };
       return finalObj;
     }, {});
+
+  return {
+    type: "object",
+    ...(exp.required.length ? { required: exp.required } : {}),
+    properties: mappedProps,
+  };
 }
 
 function identifierExpressionProcessor(exp) {
@@ -130,22 +130,14 @@ function propertyExpressionProcessor(exp) {
     return {
       [exp.key.name]: {
         type: "array",
-        items: {
-          type: "object",
-          ...(requiredProps.length ? { required: requiredProps } : {}),
-          properties: reduce(exp.value),
-        },
+        items: reduce(exp.value),
       },
     };
   }
 
   if (exp.value.type === "ObjectExpression") {
     return {
-      [exp.key.name]: {
-        type: "object",
-        ...(requiredProps.length ? { required: requiredProps } : {}),
-        properties: reduce(exp.value),
-      },
+      [exp.key.name]: reduce(exp.value),
     };
   }
 
