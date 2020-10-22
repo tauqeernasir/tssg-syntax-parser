@@ -235,9 +235,10 @@ TagName
 
 ObjectExpression
 	= _ "{" _ props:MemberExpressionList? _ "}" _ {
+    const requiredProps = props !== null && Array.isArray(props) ? props.filter((prop) => !prop.optional).map((prop) => prop.key.name) : [];
     return {
       type: "ObjectExpression",
-      required: props.filter((prop) => !prop.optional).map((prop) => prop.key.name),
+      ...(requiredProps.length ? { required: requiredProps } : {}),
       properties: optionalList(props)
     }
   }

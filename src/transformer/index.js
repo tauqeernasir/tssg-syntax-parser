@@ -94,7 +94,7 @@ function objectExpressionProcessor(exp) {
 
   return {
     type: "object",
-    ...(exp.required.length ? { required: exp.required } : {}),
+    ...(exp.required?.length ? { required: exp.required } : {}),
     properties: mappedProps,
   };
 }

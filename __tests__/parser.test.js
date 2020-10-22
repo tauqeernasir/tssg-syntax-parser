@@ -35,14 +35,17 @@ describe("tests for Parameters Block", () => {
               name: "GetUser",
               body: {
                 type: "ObjectExpression",
+                required: ["id", "filter"],
                 properties: [
                   {
                     type: "Property",
+                    optional: false,
                     key: { type: "IdentifierExpression", name: "id" },
                     value: { type: "IdentifierExpression", name: "string" },
                   },
                   {
                     type: "Property",
+                    optional: false,
                     key: { type: "IdentifierExpression", name: "filter" },
                     value: { type: "ObjectExpression", properties: [] },
                   },
@@ -72,7 +75,7 @@ describe("tests for Parameters Block", () => {
     const example = `
     Parameters    {
         GetUser {
-            id: string,
+            id?: string,
             filter: {}
         }
     }
@@ -88,14 +91,17 @@ describe("tests for Parameters Block", () => {
               name: "GetUser",
               body: {
                 type: "ObjectExpression",
+                required: ["filter"],
                 properties: [
                   {
                     type: "Property",
+                    optional: true,
                     key: { type: "IdentifierExpression", name: "id" },
                     value: { type: "IdentifierExpression", name: "string" },
                   },
                   {
                     type: "Property",
+                    optional: false,
                     key: { type: "IdentifierExpression", name: "filter" },
                     value: { type: "ObjectExpression", properties: [] },
                   },
@@ -190,9 +196,11 @@ describe("tests for RequestBodies Block", () => {
               name: "GetUserById",
               body: {
                 type: "ObjectExpression",
+                required: ["id"],
                 properties: [
                   {
                     type: "Property",
+                    optional: false,
                     key: { type: "IdentifierExpression", name: "id" },
                     value: { type: "IdentifierExpression", name: "string" },
                   },
@@ -238,14 +246,17 @@ describe("tests for RequestBodies Block", () => {
               name: "GetUser",
               body: {
                 type: "ObjectExpression",
+                required: ["id", "filter"],
                 properties: [
                   {
                     type: "Property",
+                    optional: false,
                     key: { type: "IdentifierExpression", name: "id" },
                     value: { type: "IdentifierExpression", name: "string" },
                   },
                   {
                     type: "Property",
+                    optional: false,
                     key: { type: "IdentifierExpression", name: "filter" },
                     value: { type: "ObjectExpression", properties: [] },
                   },
@@ -366,9 +377,11 @@ describe("test for repeater expression", () => {
               name: "User",
               body: {
                 type: "ObjectExpression",
+                required: ["favColors", "arrayOfNumbers", "arrayOfObjects"],
                 properties: [
                   {
                     type: "Property",
+                    optional: false,
                     key: {
                       type: "IdentifierExpression",
                       name: "favColors",
@@ -381,6 +394,7 @@ describe("test for repeater expression", () => {
                   },
                   {
                     type: "Property",
+                    optional: false,
                     key: {
                       type: "IdentifierExpression",
                       name: "arrayOfNumbers",
@@ -393,15 +407,18 @@ describe("test for repeater expression", () => {
                   },
                   {
                     type: "Property",
+                    optional: false,
                     key: {
                       type: "IdentifierExpression",
                       name: "arrayOfObjects",
                     },
                     value: {
                       type: "ObjectExpression",
+                      required: ["something"],
                       properties: [
                         {
                           type: "Property",
+                          optional: false,
                           key: {
                             type: "IdentifierExpression",
                             name: "something",
@@ -486,9 +503,11 @@ describe("test for property access expression", () => {
               name: "BaseUser",
               body: {
                 type: "ObjectExpression",
+                required: ["name", "favColors"],
                 properties: [
                   {
                     type: "Property",
+                    optional: false,
                     key: {
                       type: "IdentifierExpression",
                       name: "name",
@@ -501,6 +520,7 @@ describe("test for property access expression", () => {
                   },
                   {
                     type: "Property",
+                    optional: false,
                     key: {
                       type: "IdentifierExpression",
                       name: "favColors",
