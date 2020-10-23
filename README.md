@@ -84,7 +84,7 @@ RequestBodies {
 
     ListUsers extends BaseListParams {
         filters: {
-            ids: [string]
+            ids: string[]
         }
     }
 
@@ -119,13 +119,13 @@ Data types can be used as follow:
             zip: number
         },
         isVerified: boolean,
-        profileImages: [{
+        profileImages: {
             size: {
                 width: number,
                 height: number
             }
             url: string
-        }]
+        }[]
     }
 ```
 
