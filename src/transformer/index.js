@@ -98,6 +98,7 @@ function objectExpressionProcessor(exp) {
     type: "object",
     ...(exp.required?.length ? { required: exp.required } : {}),
     properties: mappedProps,
+    ...(exp.allowAdditional ? { additionalProperties: true } : {}),
   };
 }
 
@@ -118,6 +119,10 @@ function propertyExpressionProcessor(exp) {
     throw new Error(
       `propertyExpressionProcessor: cannot process other type ${exp.type}`
     );
+  }
+
+  if (exp.allowAdditional) {
+    return {};
   }
 
   if (exp.value.repeater === "array" && exp.value.type !== "ObjectExpression") {

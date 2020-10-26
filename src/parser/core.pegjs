@@ -240,10 +240,12 @@ TagName
 
 ObjectExpression
 	= _ "{" _ props:MemberExpressionList? _ "}" _ {
-    const requiredProps = props !== null && Array.isArray(props) ? props.filter((prop) => !prop.optional).map((prop) => prop.key.name) : [];
+    const requiredProps = props !== null && Array.isArray(props) ? props.filter((prop) => !prop.optional && !prop.allowAdditional).map((prop) => prop.key.name) : [];
+    const allowAdditional = props !== null && Array.isArray(props) ? props.some((prop) => prop.allowAdditional) : false;
     return {
       type: "ObjectExpression",
       ...(requiredProps.length ? { required: requiredProps } : {}),
+      ...(allowAdditional ? { allowAdditional } : {}),
       properties: optionalList(props)
     }
   }
@@ -261,6 +263,15 @@ KeyValueExpression
         key,
         value
       }
+  }
+  /
+  key:("[" _ Identifier _ ":" _ Identifier _ "]") _ ":" _ value:(ArrayExpression / RepeatExpression / ObjectExpression  / CallExpression / PropertyAccessExpression / Identifier / Literal / Number) {
+    return {
+      type: "Property",
+      allowAdditional: true,
+      key: key[2],
+      value
+    }
   }
 
 PropertyAccessExpression

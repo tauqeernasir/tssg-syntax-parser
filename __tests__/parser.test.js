@@ -551,4 +551,50 @@ describe("test for property access expression", () => {
     expect(() => parser.parse(example)).not.toThrowError();
     expect(parser.parse(example)).toEqual(expected);
   });
+
+  it("given correct property access expression, should return correct output", () => {
+    const expected = {
+      type: "Program",
+      body: [
+        {
+          type: "SchemasBlockExpression",
+          body: [
+            {
+              type: "SchemaExpression",
+              name: "BaseUser",
+              body: {
+                allowAdditional: true,
+                type: "ObjectExpression",
+                properties: [
+                  {
+                    type: "Property",
+                    allowAdditional: true,
+                    key: {
+                      name: "name",
+                      type: "IdentifierExpression",
+                    },
+                    value: {
+                      name: "string",
+                      type: "IdentifierExpression",
+                    },
+                  },
+                ],
+              },
+            },
+          ],
+        },
+      ],
+    };
+
+    const example = `
+      Schemas {
+        BaseUser {
+          [name: string]: string
+        }
+      }
+    `;
+
+    expect(() => parser.parse(example)).not.toThrowError();
+    expect(parser.parse(example)).toEqual(expected);
+  });
 });
