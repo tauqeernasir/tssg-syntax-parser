@@ -12,7 +12,7 @@ const mongooseSchemaTmpl = `
  * @schema {{schema_key}}
  *
  */
-const {{schema_name}}Schema = new mongoose.Schema({
+const {{schema_name}}Schema = new Schema({
   {{schema_props}}
 }, {
   strict: false,
@@ -22,7 +22,7 @@ const {{schema_name}}Schema = new mongoose.Schema({
   minimize: false,
 });
 
-export const {{schema_name}}Model = mongoose.model('{{schema_key}}', {{schema_name}}Schema);
+export const {{schema_name}}Model = model('{{schema_key}}', {{schema_name}}Schema);
 
 // ===================
 `;
@@ -82,7 +82,6 @@ function mongooseTransformer(spec) {
 // only proecess top-level schema
 function processSchema(schema) {
   const propKeys = Object.keys(schema.properties);
-  console.log("asdf", schema);
 
   let cachedProps = "";
   for (const propKey of propKeys) {
