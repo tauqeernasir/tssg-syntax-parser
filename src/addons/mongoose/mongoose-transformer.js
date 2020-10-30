@@ -9,14 +9,20 @@ import { Schema, model } from 'mongoose';
 
 const mongooseSchemaTmpl = `
 /**
- * @schema {{schema_name}}
+ * @schema {{schema_key}}
  *
  */
 const {{schema_name}}Schema = new mongoose.Schema({
   {{schema_props}}
+}, {
+  strict: false,
+  versionKey: false,
+  timestamps: true,
+  collection: '{{schema_name_underscored}}',
+  minimize: false,
 });
 
-export const {{schema_name}}Model = mongoose.model('{{schema_name}}', {{schema_name}}Schema);
+export const {{schema_name}}Model = mongoose.model('{{schema_key}}', {{schema_name}}Schema);
 
 // ===================
 `;
@@ -46,6 +52,14 @@ const lowerCaseFirst = (str) => {
     .join("");
 };
 
+const lowerAndUnderscore = function (str) {
+  return lowerCaseFirst(str)
+    .replaceAll(/([A-Z])/g, " $1")
+    .split(" ")
+    .join("_")
+    .toLowerCase();
+};
+
 // Entry point
 function mongooseTransformer(spec) {
   const { schemas } = spec;
@@ -56,6 +70,8 @@ function mongooseTransformer(spec) {
   for (const key of schemaKeys) {
     generatedMongooseCode += replaceInTemplate(mongooseSchemaTmpl, {
       schema_name: lowerCaseFirst(key),
+      schema_key: key,
+      schema_name_underscored: lowerAndUnderscore(key),
       schema_props: processSchema(schemas[key]),
     });
   }
