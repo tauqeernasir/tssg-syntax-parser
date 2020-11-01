@@ -12,7 +12,7 @@
     "merge": "node src/parser/merger.js",
     "dev": "nodemon --exec 'yarn merge && yarn build'",
     "test": "jest",
-    "build:prod": "mkdirp dist/parser && mkdirp dist/transformer && yarn merge && yarn build && cp src/transformer/index.js dist/transformer/index.js && cp src/parser/parser.js dist/parser/parser.js",
+    "build:prod": "mkdirp dist/parser && mkdirp dist/transformer && mkdirp dist/addons/mongoose && yarn merge && yarn build && cp src/transformer/index.js dist/transformer/index.js && cp src/parser/parser.js dist/parser/parser.js && cp src/addons/mongoose/mongoose-transformer.js dist/addons/mongoose/mongoose-transformer.js",
     "prettier": "prettier --tab-width 2 --write \"src/**/*.{js,json}\" \"__tests__/**/*.{js,json}\""
   },
   "devDependencies": {
@@ -21,8 +21,7 @@
     "lint-staged": "^10.2.7",
     "mkdirp": "^1.0.4",
     "nodemon": "^2.0.4",
-    "pegjs": "^0.10.0",
-    "prettier": "^2.0.5"
+    "pegjs": "^0.10.0"
   },
   "husky": {
     "hooks": {
